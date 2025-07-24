@@ -8,8 +8,11 @@ import { columns } from "@/components/table/columns";
 
 export default async function Admin() {
   const appointments = await getRecentAppointmentList();
+
+  console.log(appointments.documents);
+
   return (
-    <div className="mx-auto flex msx-w-7xl flex-col space-y-14">
+    <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <header className="sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl bg-[#0D0F10] px-[5%] py-5 shadow-lg xl:px-12">
         <Link href="/" className="cursor-pointer">
           <Image
