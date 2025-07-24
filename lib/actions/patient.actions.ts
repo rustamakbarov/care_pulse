@@ -14,21 +14,51 @@ import {
 import { parseStringify } from "../utills";
 import { InputFile } from "node-appwrite/file";
 
+// export async function createUser(user: CreateUserParams) {
+//   try {
+//     console.log("try ici salam");
+//     const newUser = await users.create(
+//       ID.unique(),
+//       user.email,
+//       user.phone,
+//       // undefined,
+//       "securePassword123",
+//       user.name
+//     );
+//     console.log("Yeni kullanici: ", newUser);
+//     return newUser;
+//   } catch (error: any) {
+//     if (error && error.code === 409) {
+//       const documents = await users.list([Query.equal("email", [user.email])]);
+
+//       return documents?.users[0];
+//     }
+//   }
+// }
+
 export async function createUser(user: CreateUserParams) {
   try {
     const newUser = await users.create(
       ID.unique(),
       user.email,
       user.phone,
-      undefined,
+      "passwrod123",
       user.name
     );
+    return newUser; // <-- burası eksikti
   } catch (error: any) {
-    if (error && error.code === 409) {
-      const documents = await users.list([Query.equal("email", [user.email])]);
+    console.error("Kullanıcı oluşturulamadı. Hata:", error);
 
-      return documents?.users[0];
+    if (error.code === 409) {
+      // Kullanıcı zaten varsa, onu bulup döndür
+      const documents = await users.list([Query.equal("email", [user.email])]);
+      console.log("Zaten mevcut kullanıcı:", documents);
+      return documents.users[0];
     }
+
+    // Diğer hataları da logla
+    console.error("Beklenmeyen hata oluştu:", error);
+    throw error;
   }
 }
 
